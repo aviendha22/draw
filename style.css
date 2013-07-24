@@ -1,0 +1,24 @@
+div{
+	border-style:ridge;
+	display:inline-block;
+	border-color:#004785;
+}
+
+circle{
+	stroke:#004785;
+	stroke-width:2;
+	fill:white;
+	cursor:pointer;
+}
+
+line{
+	stroke:#004785;
+	stroke-width:3;
+	cursor:pointer;
+}
+
+rect{
+	fill:black;
+	opacity: 0;
+	cursor:pointer;
+}
