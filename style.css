@@ -1,6 +1,31 @@
-div{
+.toolbar{
 	border-style:ridge;
 	display:inline-block;
+	border-color:#004785;
+}
+
+.canvas{
+	border-style:ridge;
+	display:inline-block;
+	border-color:#004785;
+}
+
+.forms{
+	position: relative;
+	display:inline-block;
+}
+
+.ent1-form{
+	margin: 0 auto;
+	position: relative;
+	border-style:ridge;
+	border-color:#004785;
+}
+
+.rel-form{
+	margin: 0 auto;
+	position: relative;
+	border-style:ridge;
 	border-color:#004785;
 }
 
@@ -17,8 +42,9 @@ line{
 	cursor:pointer;
 }
 
-rect{
-	fill:black;
-	opacity: 0;
-	cursor:pointer;
+label{
+	display:block;
 }
+
+
+

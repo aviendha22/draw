@@ -20,17 +20,20 @@ var	canvasC = {
 	y: (canvasH / 2) 
 };
 
-function createCanvas(){	
-	var svg = d3.select('.canvas')
-		.append('svg')
+var asserts = [];
+
+function createCanvas(){
+	var canvas = d3.select('.canvas');
+	var svg = canvas.append('svg')
 		.attr('width', canvasW)
 		.attr('height', canvasH);
 }
 
 function createToolbar(){
+			
+	var toolBar = d3.select('.toolbar');
 	
-	svg = d3.select('.toolbar')
-		.append('svg')
+	svg = toolBar.append('svg')
 		.attr('width', toolW)
 		.attr('height', toolH);
 		
@@ -41,23 +44,52 @@ function createToolbar(){
 		.attr('r', radius);
 		
 	node.on('click', function(){
-		var group = d3.select('.canvas svg')
-			.append('g')
-			.attr('class', count);
-			
-		var circle = group.append('circle')
-			.attr('class', 0)
-			.attr('cx', canvasC.x + dx)
-			.attr('cy', canvasC.y + dx)
-			.attr('r', radius)
-			.call(d3.behavior.drag().on('drag', move))
-			.on('dblclick', doubleClickNode);
-				
-		count++;
+							
+		$('.ent1-form').animate({
+			top: 85
+		}, 750);
+		$('.ent1').focus();
 		
-		dx += 2;
-	});
+		d3.select('.ent').on('click', function(){
+			//console.log($('.ent1').val());
 
+			var group = d3.select('.canvas svg')
+				.append('g')
+				.attr('class', count);
+				
+			var circle = group.append('circle')
+				.attr('d', $('.ent1').val())
+				.attr('class', 0)
+				.attr('cx', canvasC.x + dx)
+				.attr('cy', canvasC.y + dx)
+				.attr('r', radius)
+				.call(d3.behavior.drag().on('drag', move))
+				.on('dblclick', doubleClickNode)
+				.on('mouseover', nodeMouseover)
+				.on('mouseout', mouseout); 
+					
+			count++;
+			
+			dx += 2;
+			
+			$('.ent1').val('');
+			$('.ent1-form').animate({
+				top: -685
+			}, 750);
+		});
+	});
+	
+	toolBar.append('button')
+		.text('Reset')
+		.on('click', function(){
+			d3.select('.canvas svg').selectAll('g').remove();
+		});
+	
+	toolBar.append('button')
+		.text('Submit')
+		.on('click', function(){
+			console.log(asserts);
+		});
 }
 
 function move(){
@@ -87,41 +119,64 @@ function moveCircles(parent){
 		});
 };
 
-function doubleClickNode(){
-	var deg = 360 * Math.random();
-	var c = d3.select(this);
-	var r = c.attr('r');
-	var layer = parseInt(c.attr('class'), 10);
-	console.log(layer);
-	var dx = r * Math.cos(deg);
-	var dy = r * Math.sin(deg);
+function doubleClickNode(){	
+	$('.rel-form').animate({
+		top: 0
+	}, 750);
+	$('.relate').focus();
 	
-	var group = d3.select(this.parentNode);
-	var net = group.append('g');
+	var that = this;
 	
-	var cx = parseInt(c.attr('cx'), 10);
-	var cy = parseInt(c.attr('cy'), 10);
+	d3.select('.rel').on('click', function(){
 	
-	var p = net.append('line')
-		.attr('x1', function(){ return computeCoord(cx, 'x'); })
-		.attr('y1', function(){ return computeCoord(cy, 'y'); })
-		.attr('x2', function(){ return computeCoord(cx + r*dx, 'x'); })
-		.attr('y2', function(){ return computeCoord(cy + r*dy, 'y'); });
+		var deg = 360 * Math.random();
+		var c = d3.select(that);
+		var r = c.attr('r');
+		var parentLayer = parseInt(c.attr('class'), 10);
+		var dx = r * Math.cos(deg);
+		var dy = r * Math.sin(deg);
 		
-	var newC = net.append('circle')
-		.attr('class', layer + 1)
-		.attr('cx', function(){
-			return computeCoord(cx + r*dx, 'x');
-		})
-		.attr('cy', function(){
-			return computeCoord(cy + r*dy, 'y');
-		})
-		.attr('r', radius)
-		.style('fill', color(layer + 1))
-		.call(d3.behavior.drag().on('drag', dragGroup))
-		.on('dblclick', doubleClickNode);
+		var group = d3.select(that.parentNode);
+		var net = group.append('g');
 		
-	this.parentNode.appendChild(this);
+		var cx = parseInt(c.attr('cx'), 10);
+		var cy = parseInt(c.attr('cy'), 10);
+		
+		var p = net.append('line')
+			.attr('d', $('.relate').val())
+			.attr('x1', function(){ return computeCoord(cx, 'x'); })
+			.attr('y1', function(){ return computeCoord(cy, 'y'); })
+			.attr('x2', function(){ return computeCoord(cx + r*dx, 'x'); })
+			.attr('y2', function(){ return computeCoord(cy + r*dy, 'y'); })
+			.on('mouseover', linkMouseover)
+			.on('mouseout', mouseout); 
+			
+		var newC = net.append('circle')
+			.attr('d', $('.ent2').val())
+			.attr('class', parentLayer + 1)
+			.attr('cx', function(){ return computeCoord(cx + r*dx, 'x'); })
+			.attr('cy', function(){ return computeCoord(cy + r*dy, 'y'); })
+			.attr('r', radius)
+			.style('fill', color(parentLayer + 1))
+			.call(d3.behavior.drag().on('drag', dragGroup))
+			.on('dblclick', doubleClickNode)
+			.on('mouseover', nodeMouseover)
+			.on('mouseout', mouseout); 
+			
+		asserts.push({
+			entity1: c.attr('d'),
+			relationship: $('.relate').val(),
+			entity2: $('.ent2').val()
+		});
+			
+		that.parentNode.appendChild(that);
+		
+		$('.relate').val('');
+		$('.ent2').val('');
+		$('.rel-form').animate({
+			top: -600
+		}, 750);
+	});	
 };
 
 function dragGroup(){
@@ -145,7 +200,7 @@ function dragGroup(){
 			return computeCoord(newC, 'y');
 		});
 		
-	var k = d3.select(this.parentNode).selectAll('g');
+	//var k = d3.select(this.parentNode).selectAll('g');
 	var immKids = this.parentNode.childNodes;
 	var groups = [];
 	
@@ -160,6 +215,30 @@ function dragGroup(){
 	});
 }
 
+function nodeMouseover(){
+	var c = d3.select(this);
+	d3.select(this.parentNode)
+		.append('text')
+			.attr('x', parseInt(c.attr('cx'), 10) + 5)
+			.attr('y', parseInt(c.attr('cy'), 10) - 5)
+			.text(c.attr('d'));
+}
+
+function linkMouseover(){
+	var l = d3.select(this);
+	var x = (parseInt(l.attr('x1'), 10) + parseInt(l.attr('x2'), 10)) / 2;
+	var y = (parseInt(l.attr('y1'), 10) + parseInt(l.attr('y2'), 10)) / 2;
+	d3.select(this.parentNode)
+		.append('text')
+			.attr('x', x + 5)
+			.attr('y', y - 5)
+			.text(l.attr('d'));
+}
+
+function mouseout(){
+	d3.selectAll('text').remove();
+}
+
 function computeCoord(newC, axis){
 	var max = axis === 'x' ? canvasW : canvasH;
 	if (newC < 0){
@@ -170,3 +249,5 @@ function computeCoord(newC, axis){
 		return newC;
 	}
 }
+
+
