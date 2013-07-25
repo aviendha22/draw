@@ -1,32 +1,39 @@
 .toolbar{
+	float:top;
+	top:0px;
 	border-style:ridge;
 	display:inline-block;
 	border-color:#004785;
 }
 
 .canvas{
+	float:top;
 	border-style:ridge;
 	display:inline-block;
 	border-color:#004785;
 }
 
 .forms{
-	position: relative;
+	position: absolute;
 	display:inline-block;
 }
 
 .ent1-form{
-	margin: 0 auto;
-	position: relative;
+	top:-100;
+	background:white;
+	position: absolute;
 	border-style:ridge;
 	border-color:#004785;
+	height:100px;
 }
 
 .rel-form{
-	margin: 0 auto;
-	position: relative;
+	top:-200;
+	background:white;
+	position: absolute;
 	border-style:ridge;
 	border-color:#004785;
+	height:150px;
 }
 
 circle{
@@ -45,6 +52,3 @@ line{
 label{
 	display:block;
 }
-
-
-

@@ -8,8 +8,8 @@ var radius = 8;
 
 var canvasW = 500,
  	canvasH = 500,
- 	toolW = 200,
- 	toolH = 500;
+ 	toolW = 150,
+ 	toolH = 400;
  	
 var toolC = { 
 	x: (toolW / 2),
@@ -23,6 +23,7 @@ var	canvasC = {
 var asserts = [];
 
 function createCanvas(){
+	
 	var canvas = d3.select('.canvas');
 	var svg = canvas.append('svg')
 		.attr('width', canvasW)
@@ -30,9 +31,7 @@ function createCanvas(){
 }
 
 function createToolbar(){
-			
 	var toolBar = d3.select('.toolbar');
-	
 	svg = toolBar.append('svg')
 		.attr('width', toolW)
 		.attr('height', toolH);
@@ -46,13 +45,11 @@ function createToolbar(){
 	node.on('click', function(){
 							
 		$('.ent1-form').animate({
-			top: 85
+			top:( $('.canvas').height() / 2 ) - ( $('.ent1-form').height() / 2 )
 		}, 750);
 		$('.ent1').focus();
 		
 		d3.select('.ent').on('click', function(){
-			//console.log($('.ent1').val());
-
 			var group = d3.select('.canvas svg')
 				.append('g')
 				.attr('class', count);
@@ -65,7 +62,7 @@ function createToolbar(){
 				.attr('r', radius)
 				.call(d3.behavior.drag().on('drag', move))
 				.on('dblclick', doubleClickNode)
-				.on('mouseover', nodeMouseover)
+				.on('mouseover', mouseover)
 				.on('mouseout', mouseout); 
 					
 			count++;
@@ -74,21 +71,23 @@ function createToolbar(){
 			
 			$('.ent1').val('');
 			$('.ent1-form').animate({
-				top: -685
+				top: '-'+ 2*$('.ent1-form').height()
 			}, 750);
 		});
 	});
 	
-	toolBar.append('button')
+	var div = d3.select('body').append('div');
+	
+	div.append('button')
 		.text('Reset')
-		.on('click', function(){
+		d3.select('reset').on('click', function(){
 			d3.select('.canvas svg').selectAll('g').remove();
 		});
 	
-	toolBar.append('button')
+	div.append('button')
 		.text('Submit')
 		.on('click', function(){
-			console.log(asserts);
+			console.log(JSON.stringify(asserts));
 		});
 }
 
@@ -102,10 +101,22 @@ function moveLines(parent){
 		.each(function(d,i){
 			var line = d3.select(this);
 			
-			line.attr('x1', function() { return d3.event.dx + parseInt(line.attr('x1')) })
-				.attr('y1', function() { return d3.event.dy + parseInt(line.attr('y1')) })
-				.attr('x2', function() { return d3.event.dx + parseInt(line.attr('x2')) })
-				.attr('y2', function() { return d3.event.dy + parseInt(line.attr('y2')) });
+			line.attr('x1', function() { 
+					var newC = d3.event.dx + parseInt(line.attr('x1')); 
+					return computeCoord(newC, 'x');
+				})
+				.attr('y1', function() { 
+					var newC = d3.event.dy + parseInt(line.attr('y1')); 
+					return computeCoord(newC, 'y'); 
+				})
+				.attr('x2', function() { 
+					var newC = d3.event.dx + parseInt(line.attr('x2')); 
+					return computeCoord(newC, 'x');
+				})
+				.attr('y2', function() { 
+					var newC = d3.event.dy + parseInt(line.attr('y2')); 
+					return computeCoord(newC, 'y'); 
+				});
 		});
 };
 
@@ -114,16 +125,22 @@ function moveCircles(parent){
 		.each(function(d,i){
 			var circle = d3.select(this);
 			
-			circle.attr('cx', function() { return d3.event.dx + parseInt(circle.attr('cx')) })
-				  .attr('cy', function() { return d3.event.dy + parseInt(circle.attr('cy')) });
+			circle.attr('cx', function() { 
+				var newC = d3.event.dx + parseInt(circle.attr('cx'));
+				return computeCoord(newC, 'x');
+			})
+			.attr('cy', function() { 
+				var newC =  d3.event.dy + parseInt(circle.attr('cy'));
+				return computeCoord(newC, 'y'); 
+			});
 		});
 };
 
 function doubleClickNode(){	
 	$('.rel-form').animate({
-		top: 0
+		top: ( $('.canvas').height() / 2 ) - ( $('.rel-form').height() / 2 )
 	}, 750);
-	$('.relate').focus();
+	$('.relate').focus();		//apparently errors in IE if focus before visible
 	
 	var that = this;
 	
@@ -148,7 +165,7 @@ function doubleClickNode(){
 			.attr('y1', function(){ return computeCoord(cy, 'y'); })
 			.attr('x2', function(){ return computeCoord(cx + r*dx, 'x'); })
 			.attr('y2', function(){ return computeCoord(cy + r*dy, 'y'); })
-			.on('mouseover', linkMouseover)
+			.on('mouseover', mouseover)
 			.on('mouseout', mouseout); 
 			
 		var newC = net.append('circle')
@@ -160,7 +177,7 @@ function doubleClickNode(){
 			.style('fill', color(parentLayer + 1))
 			.call(d3.behavior.drag().on('drag', dragGroup))
 			.on('dblclick', doubleClickNode)
-			.on('mouseover', nodeMouseover)
+			.on('mouseover', mouseover)
 			.on('mouseout', mouseout); 
 			
 		asserts.push({
@@ -174,7 +191,7 @@ function doubleClickNode(){
 		$('.relate').val('');
 		$('.ent2').val('');
 		$('.rel-form').animate({
-			top: -600
+			top: '-'+ 2*$('.rel-form').height()
 		}, 750);
 	});	
 };
@@ -200,7 +217,6 @@ function dragGroup(){
 			return computeCoord(newC, 'y');
 		});
 		
-	//var k = d3.select(this.parentNode).selectAll('g');
 	var immKids = this.parentNode.childNodes;
 	var groups = [];
 	
@@ -210,29 +226,33 @@ function dragGroup(){
 	
 	d3.selectAll(groups).each(function(d, i){
 		var l = d3.select(this).select('line');
-		l.attr('x1', function() { return d3.event.dx + parseInt(l.attr('x1')) })
-			.attr('y1', function() { return d3.event.dy + parseInt(l.attr('y1')) });
+		l.attr('x1', function() { 
+			var newC = d3.event.dx + parseInt(l.attr('x1'));
+			return computeCoord(newC, 'x');
+		})
+		.attr('y1', function() { 
+			var newC = d3.event.dy + parseInt(l.attr('y1'));
+			return computeCoord(newC, 'y');
+		});
 	});
 }
 
-function nodeMouseover(){
+function mouseover(){
+	var x = 0, y = 0;
+		
 	var c = d3.select(this);
-	d3.select(this.parentNode)
-		.append('text')
-			.attr('x', parseInt(c.attr('cx'), 10) + 5)
-			.attr('y', parseInt(c.attr('cy'), 10) - 5)
-			.text(c.attr('d'));
-}
-
-function linkMouseover(){
-	var l = d3.select(this);
-	var x = (parseInt(l.attr('x1'), 10) + parseInt(l.attr('x2'), 10)) / 2;
-	var y = (parseInt(l.attr('y1'), 10) + parseInt(l.attr('y2'), 10)) / 2;
-	d3.select(this.parentNode)
-		.append('text')
-			.attr('x', x + 5)
-			.attr('y', y - 5)
-			.text(l.attr('d'));
+	
+	if(this.localName === 'circle'){
+		x = parseInt(c.attr('cx'), 10) + 15;
+		y = parseInt(c.attr('cy'), 10) - 15;
+	} else if (this.localName === 'line'){
+		x = ((parseInt(c.attr('x1'), 10) + parseInt(c.attr('x2'), 10)) / 2) + 15;
+		y = ((parseInt(c.attr('y1'), 10) + parseInt(c.attr('y2'), 10)) / 2) - 15;
+	} 
+		
+	d3.select(this.parentNode).append('text')
+		.attr('x', x).attr('y', y)
+		.text(c.attr('d'));
 }
 
 function mouseout(){
@@ -249,5 +269,3 @@ function computeCoord(newC, axis){
 		return newC;
 	}
 }
-
-

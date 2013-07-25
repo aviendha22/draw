@@ -6,11 +6,11 @@
 	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 	<script src="http://d3js.org/d3.v3.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="style.css" />
-	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 	<script src='./draw.js'></script>
 </head>
 <body>
-	<div class="toolbar"></div>
+	<div class="toolbar">
+	</div>
 	<div class="canvas"></div>
 	<div class="forms">
 		<div class="ent1-form">
@@ -24,6 +24,7 @@
 			<button class='rel'>Submit</button>
 		</div>
 	</div>
+	
 	<script type="text/javascript">
 		createToolbar();
 		createCanvas();
@@ -34,5 +35,6 @@
 			top: '-'+$(this).height()
 		}, 0);	
 	</script>
+	
 </body>
 </html>
