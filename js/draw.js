@@ -269,3 +269,22 @@ function computeCoord(newC, axis){
 		return newC;
 	}
 }
+
+	public static void main(String[] args) {
+		ExtractionService extractor = new ExtractionService();
+		ArrayList<Tree> trees = extractor.parser.parse("I seriously go stay at the beach for a week every summer since third grade.");
+		
+		System.out.println(trees);
+		
+		for (int i = 0; i < trees.size(); i++){
+			Tree root = trees.get(i);
+			int numKids = root.lastChild().numChildren();
+			root.lastChild().removeChild(numKids - 1);
+			Tree output = extractor.extractTriplet(root);
+			System.out.println(root);
+			if(output == null)
+				System.err.println("ERROR: Could not find triplet");
+			else
+				output.printLocalTree();
+		}
+	}
