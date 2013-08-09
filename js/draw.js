@@ -1073,7 +1073,7 @@ var draw = function(){
 			};
 			console.log(JSON.stringify(postData));
 			
-			var request = new XMLHttpRequest();
+			/*var request = new XMLHttpRequest();
 			var url = 'http://localhost:8081/target_assertion/';
 			
 			request.open('POST', url, true);
@@ -1099,7 +1099,7 @@ var draw = function(){
 				
 			//var url = 'http://localhost:8081/target_assertion/?callback=localJsonpCallback&' +JSON.stringify(postData);
 			
-			/*$.ajax({
+			$.ajax({
 				url: url,
 				type: 'POST',
 				data: escape(JSON.stringify(postData)),
@@ -1138,7 +1138,7 @@ var draw = function(){
 				};
 				var url = 'http://localhost:8081/target_assertion/';
 				console.log(JSON.stringify(postData));
-				$.ajax({
+				/*$.ajax({
 					type:'POST',
 					beforeSend: function(request){
 						request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -1147,7 +1147,7 @@ var draw = function(){
 					url: url,
 					data: 'json=' + escape(JSON.stringify(postData)),
 					processData: false
-				});
+				});*/
 			}
 		}
 	};
