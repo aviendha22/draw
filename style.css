@@ -1,16 +1,24 @@
-.toolbar{
-	float:top;
+.toolbar_modes, .toolbar_buttons{
 	top:0px;
 	border-style:ridge;
 	display:inline-block;
 	border-color:#004785;
 }
 
+.tsvg{
+	width: 40px;
+	height: 500px;
+}
+
 .canvas{
-	float:top;
 	border-style:ridge;
 	display:inline-block;
 	border-color:#004785;
+}
+
+.csvg{ 
+	width: 750px;
+	height: 500px;
 }
 
 .forms{
@@ -19,7 +27,7 @@
 }
 
 .ent1-form{
-	top:-100;
+	top:-100px;
 	background:white;
 	position: absolute;
 	border-style:ridge;
@@ -28,7 +36,7 @@
 }
 
 .rel-form{
-	top:-100;
+	top:-100px;
 	background:white;
 	position: absolute;
 	border-style:ridge;
@@ -37,7 +45,7 @@
 }
 
 .rel-ent2-form{
-	top:-200;
+	top:-200px;
 	background:white;
 	position: absolute;
 	border-style:ridge;
@@ -70,10 +78,57 @@ label{
 }
 
 .unselect{
-	fill:white;
-	border-color:#004785;
+	fill: none;
 }
 .select{
-	fill:#C0C0C0;
-	border-color:#004785;	
+	fill: #333399;
+	opacity: 0.2;
+	stroke: #333399;
+}
+
+.selection{
+	border: 1px solid #89B;
+	background: #BCE;
+	background-color: #BEC;
+	border-color: #8B0;
+}
+
+.entity1Color{
+	display:none;
+	background-color: #333399;
+}
+
+.entity2Color{
+	display:none;
+	background-color: #339966;
+}
+
+.bothColor{
+	display:none;
+	background-color: #9900cc;
+}
+
+.mover_hold{
+	background-image:url('img/move.gif');
+	background-repeat: no-repeat;
+	height:30px;
+	width:30px;
+	position:relative;
+}
+
+.delete_hold{
+	background-image:url('img/delete.gif');
+	background-repeat: no-repeat;
+	height:30px;
+	width:30px;
+	position:relative;
+}
+
+button{
+	width: 5em;
+}
+
+.border{
+	fill: none;
+	stroke: black;
 }
